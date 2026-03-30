@@ -104,6 +104,13 @@
         /* Hero Section */
         #home {
             background-color: var(--charcoal-brown);
+            background-image: linear-gradient(
+                rgba(37, 41, 28, 0.85),
+                rgba(37, 41, 28, 0.85)
+            ), url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1920&q=80&sat=-100');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: var(--beige);
         }
         
@@ -195,6 +202,30 @@
             padding-bottom: 2rem;
         }
 
+        /* Links styling for articles */
+        .article-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .article-links a {
+            color: var(--beige);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--grey-olive);
+            border-radius: 6px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .article-links a:hover {
+            background-color: var(--vanilla-custard);
+            color: var(--charcoal-brown);
+            border-color: var(--vanilla-custard);
+        }
+
         /* Footer */
         footer {
             background: var(--charcoal-brown);
@@ -218,7 +249,7 @@
 
     <section id="home">
         <h1>Built to Design.<br>Powered by AI.</h1>
-        <p>A portfolio exploring the intersection of automation, and artificial intelligence in the AEC industry.</p>
+        <p>A portfolio exploring the intersection of automation and artificial intelligence in the AEC industry.</p>
     </section>
 
     <section id="about">
@@ -227,11 +258,6 @@
                 <h2>About Me</h2>
                 <p>I am a structural engineering designer focused on bridging the gap between traditional architectural and engineering practices and the next generation of AI tools. My work revolves around project design, coordination meetings, and finding ways to work smarter, not harder.</p>
                 <p>From sizing wood posts and designing reinforced concrete shear walls to managing complex code requirements (ASCE, ACI, AISC), I leverage AI and automation tools like Microsoft Power Automate to streamline workflows, allowing for more focus on critical design analysis.</p>
-            </div>
-            <div>
-                <div style="width: 100%; height: 400px; background-color: var(--grey-olive); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--charcoal-brown);">
-                    [Image Placeholder]
-                </div>
             </div>
         </div>
     </section>
@@ -253,12 +279,6 @@
                 <code class="code-snippet">convertFromUtc(item()?['start'], 'Eastern Standard Time', 'hh:mm tt')</code>
             </div>
 
-            <div class="project-card">
-                <h3>Project Powerlock</h3>
-                <p>An experimental AI project stepping outside traditional AEC bounds. "Powerlock" is an agent designed to monitor live stock market trades, analyze the data stream, and generate calculated buy/sell notifications based on established parameters.</p>
-                <p><strong>Learning Outcome:</strong> Advanced prompt engineering, live-data parsing, and decision-logic structuring.</p>
-            </div>
-
         </div>
     </section>
 
@@ -267,18 +287,43 @@
         <div class="article-list">
             
             <div class="article-item">
-                <h3>Week 1: The Rise of Generative Design in AEC</h3>
-                <p>A summary and reflection on how physical AI and generative models are altering early-stage conceptual design and load path analysis. <em>[Interactive summary placeholder]</em></p>
+                <h3>Week 1: The Future of AI & Industry Disruption</h3>
+                <p><strong>Summary:</strong> An exploration of AI's evolution from an experimental phase to the "Generative Era," acting as a catalyst for compressed innovation. While promising unprecedented efficiency, it introduces risks like labor disruption and the climate paradox. In the AEC industry, these general trends manifest directly through robotics in prefabrication, supply chain optimization, and the rapid expansion of generative design.</p>
+                <div class="article-links">
+                    <a href="https://builtin.com/artificial-intelligence/artificial-intelligence-future" target="_blank">Original Source</a>
+                    <a href="week1.pdf" target="_blank">View Summary (PDF)</a>
+                    <a href="week1_interactive.pdf" target="_blank">View Interactive (Gamma AI)</a>
+                </div>
             </div>
 
             <div class="article-item">
-                <h3>Week 2: Autonomous Systems and Real-World Scale</h3>
-                <p>Analyzing the impact of large-scale AI deployment (similar to autonomous transport like Waabi) and how neural simulation standards might eventually apply to structural failure simulations. <em>[Interactive summary placeholder]</em></p>
+                <h3>Week 2: AGI and the Davos 2026 Consensus</h3>
+                <p><strong>Summary:</strong> A review of the World Economic Forum (Davos 2026) fireside chat on Artificial General Intelligence (AGI). Industry leaders note AGI is shifting from theoretical discussion to immediate urgency via recursive self-improvement. Because engineering is a math-based "verifiable domain," the AEC sector is highly susceptible to this agentic shift, forcing humans to transition from performing calculations to acting as "risk validators."</p>
+                <div class="article-links">
+                    <a href="#" target="_blank">Original Source</a>
+                    <a href="week2.pdf" target="_blank">View Summary (PDF)</a>
+                    <a href="week2_interactive.mp4" target="_blank">View Interactive (InVideo AI)</a>
+                </div>
             </div>
             
             <div class="article-item">
-                <h3>Week 3: Workflow Automation via LLMs</h3>
-                <p>Examining recent developments in local LLMs and agentic frameworks that allow for secure, proprietary data handling within engineering firms without exposing sensitive client data to public models. <em>[Interactive summary placeholder]</em></p>
+                <h3>Week 3: The Ethics of Artificial Superintelligence (ASI)</h3>
+                <p><strong>Summary:</strong> Based on research from Springer Nature, this week tackles the "Net Impact" dilemma of ASI. While ASI could solve major global issues like climate change, it poses severe existential risks. For the AEC sector specifically, ASI could generate mathematically perfect but code-violating designs, fundamentally disrupting traditional material procurement and triggering a massive professional liability crisis.</p>
+                <div class="article-links">
+                    <a href="#" target="_blank">Original Source</a>
+                    <a href="week3.pdf" target="_blank">View Summary (PDF)</a>
+                    <a href="week3_interactive.pdf" target="_blank">View Interactive (Gamma AI)</a>
+                </div>
+            </div>
+
+            <div class="article-item">
+                <h3>Week 4: The Hallucination Trap & Behavioral Calibration</h3>
+                <p><strong>Summary:</strong> An analysis of "Why Language Models Hallucinate" (Kalai et al., 2025). The research proves hallucinations are statistical inevitabilities, worsened by benchmarks that incentivize AI to guess rather than admit ignorance. For high-stakes AEC applications where precision is paramount, models require strict "behavioral calibration" and heavy penalties for confident errors, as standard Retrieval-Augmented Generation (RAG) cannot fix the core incentive to guess on unique project data.</p>
+                <div class="article-links">
+                    <a href="#" target="_blank">Original Source</a>
+                    <a href="week4.pdf" target="_blank">View Summary (PDF)</a>
+                    <a href="week4_interactive.jpg" target="_blank">View Interactive (NotebookLM)</a>
+                </div>
             </div>
 
         </div>
