@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in AEC | Professional Portfolio</title>
+    <style>
+        /* Provided CSS HEX / Variables */
+        :root {
+            --beige: #e3e7d3ff;
+            --silver: #bdc2bfff;
+            --grey-olive: #989c94ff;
+            --charcoal-brown: #25291cff;
+            --vanilla-custard: #e6e49fff;
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--beige);
+            color: var(--charcoal-brown);
+            line-height: 1.6;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+            color: var(--charcoal-brown);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(227, 231, 211, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.25rem;
+            text-decoration: none;
+            color: var(--charcoal-brown);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal-brown);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--grey-olive);
+        }
+
+        /* Sections */
+        section {
+            padding: 8rem 5% 5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Hero Section */
+        #home {
+            background-color: var(--charcoal-brown);
+            color: var(--beige);
+        }
+        
+        #home p {
+            color: var(--silver);
+            max-width: 600px;
+            font-size: 1.5rem;
+        }
+
+        /* About Section */
+        #about {
+            background-color: var(--vanilla-custard);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Projects Section */
+        #projects {
+            background-color: var(--beige);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--silver);
+            padding: 2.5rem;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card h3 {
+            color: var(--charcoal-brown);
+        }
+        
+        .code-snippet {
+            display: block;
+            background: var(--charcoal-brown);
+            color: var(--vanilla-custard);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        /* Articles Section */
+        #articles {
+            background-color: var(--charcoal-brown);
+            color: var(--beige);
+        }
+
+        #articles h2, #articles h3 {
+            color: var(--vanilla-custard);
+        }
+        
+        #articles p {
+            color: var(--silver);
+        }
+
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 800px;
+        }
+
+        .article-item {
+            border-bottom: 1px solid var(--grey-olive);
+            padding-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--charcoal-brown);
+            color: var(--grey-olive);
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#home" class="logo">AI in AEC</a>
+        <div class="nav-links">
+            <a href="#about">About Me</a>
+            <a href="#projects">Projects</a>
+            <a href="#articles">Weekly Articles</a>
+        </div>
+    </nav>
+
+    <section id="home">
+        <h1>Built to Design.<br>Powered by AI.</h1>
+        <p>A portfolio exploring the intersection of automation, and artificial intelligence in the AEC industry.</p>
+    </section>
+
+    <section id="about">
+        <div class="about-grid">
+            <div>
+                <h2>About Me</h2>
+                <p>I am a structural engineering designer focused on bridging the gap between traditional architectural and engineering practices and the next generation of AI tools. My work revolves around project design, coordination meetings, and finding ways to work smarter, not harder.</p>
+                <p>From sizing wood posts and designing reinforced concrete shear walls to managing complex code requirements (ASCE, ACI, AISC), I leverage AI and automation tools like Microsoft Power Automate to streamline workflows, allowing for more focus on critical design analysis.</p>
+            </div>
+            <div>
+                <div style="width: 100%; height: 400px; background-color: var(--grey-olive); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--charcoal-brown);">
+                    [Image Placeholder]
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2>AEC Use Cases & Projects</h2>
+        <div class="project-grid">
+            
+            <div class="project-card">
+                <h3>Structural Engineering Assistant</h3>
+                <p>A custom AI agent configured specifically for structural designers. It acts as a rapid knowledge base for code compliance, specifically trained to reference ASCE 7 and ACI 318.</p>
+                <p><strong>Key Feature:</strong> The agent is programmed with a priority directive to first check internal resources via the SharePoint location <code>(013200 Structural - Real Estate, Guides)</code> before utilizing broader data. Test validation included specific prompts such as querying for minimum slab reinforcement limits.</p>
+            </div>
+
+            <div class="project-card">
+                <h3>Executive Time Management & Proposal Flow</h3>
+                <p>An automated workflow utilizing Microsoft Power Automate to generate daily briefings by parsing Outlook calendars and emails. This project also features an AI agent designed to assist management with drafting proposals across public safety, water/wastewater, and education markets.</p>
+                <p><strong>Technical Detail:</strong> Utilized OData filter queries and precise data formatting to manage time zones effectively:</p>
+                <code class="code-snippet">convertFromUtc(item()?['start'], 'Eastern Standard Time', 'hh:mm tt')</code>
+            </div>
+
+            <div class="project-card">
+                <h3>Project Powerlock</h3>
+                <p>An experimental AI project stepping outside traditional AEC bounds. "Powerlock" is an agent designed to monitor live stock market trades, analyze the data stream, and generate calculated buy/sell notifications based on established parameters.</p>
+                <p><strong>Learning Outcome:</strong> Advanced prompt engineering, live-data parsing, and decision-logic structuring.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="articles">
+        <h2>Analysis of Weekly AI News</h2>
+        <div class="article-list">
+            
+            <div class="article-item">
+                <h3>Week 1: The Rise of Generative Design in AEC</h3>
+                <p>A summary and reflection on how physical AI and generative models are altering early-stage conceptual design and load path analysis. <em>[Interactive summary placeholder]</em></p>
+            </div>
+
+            <div class="article-item">
+                <h3>Week 2: Autonomous Systems and Real-World Scale</h3>
+                <p>Analyzing the impact of large-scale AI deployment (similar to autonomous transport like Waabi) and how neural simulation standards might eventually apply to structural failure simulations. <em>[Interactive summary placeholder]</em></p>
+            </div>
+            
+            <div class="article-item">
+                <h3>Week 3: Workflow Automation via LLMs</h3>
+                <p>Examining recent developments in local LLMs and agentic frameworks that allow for secure, proprietary data handling within engineering firms without exposing sensitive client data to public models. <em>[Interactive summary placeholder]</em></p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 AI in AEC Portfolio. Built for academic and professional showcase.</p>
+    </footer>
+
+</body>
+</html>
