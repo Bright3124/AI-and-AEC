@@ -22,6 +22,12 @@
             box-sizing: border-box;
         }
 
+        /* NEW: Fade-in animation to hide initial load glitches */
+        @keyframes globalFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
         body {
             font-family: var(--font-main);
             background-color: var(--charcoal-brown);
@@ -29,8 +35,11 @@
             line-height: 1.6;
             overflow-x: hidden;
             -ms-overflow-style: none;  
-            scrollbar-width: none;  
+            scrollbar-width: none; 
+            /* NEW: Applies the fade-in over 0.6 seconds */
+            animation: globalFadeIn 0.6s ease-in-out forwards;
         }
+        
         body::-webkit-scrollbar { 
             display: none; 
         }
@@ -122,12 +131,10 @@
             width: 100%;
         }
 
-        /* UPDATED: 3D REVEAL ANIMATIONS (Fast & Snappy) */
+        /* 3D REVEAL ANIMATIONS */
         .reveal {
             opacity: 0;
-            /* Reduced travel distance so it snaps into place faster */
             transform: perspective(1200px) translateZ(-60px) scale(0.95) translateY(20px);
-            /* Reduced duration to 0.8s and used a sharp ease-out curve */
             transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d;
         }
@@ -137,19 +144,17 @@
             transform: perspective(1200px) translateZ(0) scale(1) translateY(0);
         }
 
-        /* Force titles to appear instantly with 0s delay */
         section h2.reveal {
-            transition-delay: .15s !important;
+            transition-delay: 0s !important;
         }
 
-        /* Delay the tiles so they confidently appear AFTER the title */
-        .project-grid .reveal:nth-child(1) { transition-delay: 0.35s; }
-        .project-grid .reveal:nth-child(2) { transition-delay: 0.45s; }
+        .project-grid .reveal:nth-child(1) { transition-delay: 0.15s; }
+        .project-grid .reveal:nth-child(2) { transition-delay: 0.25s; }
         
-        .article-list .reveal:nth-child(1) { transition-delay: 0.35s; }
-        .article-list .reveal:nth-child(2) { transition-delay: 0.45s; }
-        .article-list .reveal:nth-child(3) { transition-delay: 0.55s; }
-        .article-list .reveal:nth-child(4) { transition-delay: 0.65s; }
+        .article-list .reveal:nth-child(1) { transition-delay: 0.15s; }
+        .article-list .reveal:nth-child(2) { transition-delay: 0.25s; }
+        .article-list .reveal:nth-child(3) { transition-delay: 0.35s; }
+        .article-list .reveal:nth-child(4) { transition-delay: 0.45s; }
 
         /* Sections General */
         section {
@@ -359,7 +364,7 @@
                     <a href="building.pdf" target="_blank">Building</a>
                     <a href="testing.pdf" target="_blank">Testing</a>
                 </div>
-     
+
         </div>
     </section>
 
@@ -415,6 +420,14 @@
     </footer>
 
     <script>
+        // NEW: Disable browser's native scroll restoration to prevent jumping on reload
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
+        // NEW: Force the page to start at the absolute top on reload
+        window.scrollTo(0, 0);
+
         document.addEventListener("DOMContentLoaded", () => {
             const reveals = document.querySelectorAll(".reveal");
             const observerOptions = { root: null, rootMargin: "0px", threshold: 0.15 };
@@ -494,9 +507,7 @@
                 const targetPosition = pages[index].offsetTop;
                 const startPosition = window.pageYOffset;
                 const distance = targetPosition - startPosition;
-                
-                // *** UPDATED SCROLL SPEED: Dropped from 1500ms to 1000ms for a fast, snappy slide ***
-                const duration = 1000; 
+                const duration = 800; 
                 let start = null;
 
                 window.requestAnimationFrame(step);
