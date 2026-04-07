@@ -122,11 +122,13 @@
             width: 100%;
         }
 
-        /* 3D REVEAL ANIMATIONS */
+        /* UPDATED: 3D REVEAL ANIMATIONS (Fast & Snappy) */
         .reveal {
             opacity: 0;
-            transform: perspective(1200px) translateZ(-150px) scale(0.8) translateY(40px);
-            transition: all 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+            /* Reduced travel distance so it snaps into place faster */
+            transform: perspective(1200px) translateZ(-60px) scale(0.95) translateY(20px);
+            /* Reduced duration to 0.8s and used a sharp ease-out curve */
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d;
         }
 
@@ -135,13 +137,19 @@
             transform: perspective(1200px) translateZ(0) scale(1) translateY(0);
         }
 
-        .project-grid .reveal:nth-child(1) { transition-delay: 0.1s; }
-        .project-grid .reveal:nth-child(2) { transition-delay: 0.25s; }
+        /* Force titles to appear instantly with 0s delay */
+        section h2.reveal {
+            transition-delay: .15s !important;
+        }
+
+        /* Delay the tiles so they confidently appear AFTER the title */
+        .project-grid .reveal:nth-child(1) { transition-delay: 0.35s; }
+        .project-grid .reveal:nth-child(2) { transition-delay: 0.45s; }
         
-        .article-list .reveal:nth-child(1) { transition-delay: 0.1s; }
-        .article-list .reveal:nth-child(2) { transition-delay: 0.25s; }
-        .article-list .reveal:nth-child(3) { transition-delay: 0.4s; }
-        .article-list .reveal:nth-child(4) { transition-delay: 0.55s; }
+        .article-list .reveal:nth-child(1) { transition-delay: 0.35s; }
+        .article-list .reveal:nth-child(2) { transition-delay: 0.45s; }
+        .article-list .reveal:nth-child(3) { transition-delay: 0.55s; }
+        .article-list .reveal:nth-child(4) { transition-delay: 0.65s; }
 
         /* Sections General */
         section {
@@ -217,7 +225,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2.5rem;
             border-radius: 16px;
-            transition: transform 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
@@ -351,7 +359,7 @@
                     <a href="building.pdf" target="_blank">Building</a>
                     <a href="testing.pdf" target="_blank">Testing</a>
                 </div>
-
+     
         </div>
     </section>
 
@@ -408,7 +416,6 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // 1. The Intersection Observer (handles the 3D pop-in effect)
             const reveals = document.querySelectorAll(".reveal");
             const observerOptions = { root: null, rootMargin: "0px", threshold: 0.15 };
             
@@ -417,7 +424,6 @@
                     if (entry.isIntersecting) {
                         entry.target.classList.add("active");
                     } else {
-                        // Removing the class allows the animation to replay
                         entry.target.classList.remove("active"); 
                     }
                 });
@@ -425,15 +431,12 @@
 
             reveals.forEach(reveal => observer.observe(reveal));
 
-            // 2. The Smart Scroll Engine (Allows internal scrolling, triggers animation at boundaries)
             const pages = document.querySelectorAll('section, footer');
             let currentIndex = 0;
             let isAnimating = false;
 
-            // Constantly track which section the user is currently reading
             window.addEventListener('scroll', () => {
                 if (isAnimating) return;
-                // Calculate the middle of the screen to accurately determine the active section
                 const scrollMiddle = window.pageYOffset + (window.innerHeight / 2);
                 
                 pages.forEach((page, index) => {
@@ -443,7 +446,6 @@
                 });
             }, { passive: true });
 
-            // Intercept mouse wheel at the boundaries
             window.addEventListener('wheel', (e) => {
                 if (isAnimating) {
                     e.preventDefault();
@@ -456,31 +458,25 @@
                 const scrollY = window.pageYOffset;
                 const windowH = window.innerHeight;
 
-                // Define the Trigger Points (with a 5px tolerance for smooth calculations)
                 const isAtBottom = (scrollY + windowH) >= (sectionBottom - 5);
                 const isAtTop = scrollY <= (sectionTop + 5);
 
-                if (e.deltaY > 0) { // User is scrolling DOWN
+                if (e.deltaY > 0) { 
                     if (isAtBottom && currentIndex < pages.length - 1) {
-                        // Hit the bottom trigger point! Stop native scroll and transition.
                         e.preventDefault(); 
                         currentIndex++;
                         customScrollTo(currentIndex);
                     }
-                    // If isAtBottom is FALSE, the script ignores it and lets you scroll normally!
                 } 
-                else if (e.deltaY < 0) { // User is scrolling UP
+                else if (e.deltaY < 0) { 
                     if (isAtTop && currentIndex > 0) {
-                        // Hit the top trigger point! Stop native scroll and transition.
                         e.preventDefault(); 
                         currentIndex--;
                         customScrollTo(currentIndex);
                     }
-                    // If isAtTop is FALSE, the script ignores it and lets you scroll normally!
                 }
             }, { passive: false });
 
-            // Navigation link clicks
             document.querySelectorAll('.nav-links a, .logo').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -493,15 +489,14 @@
                 });
             });
 
-            // The animation speed and math
             function customScrollTo(index) {
                 isAnimating = true;
                 const targetPosition = pages[index].offsetTop;
                 const startPosition = window.pageYOffset;
                 const distance = targetPosition - startPosition;
                 
-                // SPEED CONTROL: 1500 = 1.5 seconds. Increase to slow down.
-                const duration = 1500; 
+                // *** UPDATED SCROLL SPEED: Dropped from 1500ms to 1000ms for a fast, snappy slide ***
+                const duration = 1000; 
                 let start = null;
 
                 window.requestAnimationFrame(step);
@@ -510,7 +505,6 @@
                     if (!start) start = timestamp;
                     const progress = timestamp - start;
                     
-                    // Ease-in-out curve for cinematic glide
                     const easeInOut = progress < duration / 2
                         ? 4 * Math.pow(progress / duration, 3)
                         : 1 - Math.pow(-2 * progress / duration + 2, 3) / 2;
@@ -521,7 +515,6 @@
                         window.requestAnimationFrame(step);
                     } else {
                         window.scrollTo(0, targetPosition);
-                        // Brief timeout before allowing the next scroll to prevent trackpad bouncing
                         setTimeout(() => { isAnimating = false; }, 50); 
                     }
                 }
