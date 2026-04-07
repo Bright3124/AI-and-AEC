@@ -22,7 +22,7 @@
             box-sizing: border-box;
         }
 
-        /* NEW: Fade-in animation to hide initial load glitches */
+        /* Fade-in animation to hide initial load glitches */
         @keyframes globalFadeIn {
             0% { opacity: 0; }
             100% { opacity: 1; }
@@ -36,7 +36,6 @@
             overflow-x: hidden;
             -ms-overflow-style: none;  
             scrollbar-width: none; 
-            /* NEW: Applies the fade-in over 0.6 seconds */
             animation: globalFadeIn 0.6s ease-in-out forwards;
         }
         
@@ -364,7 +363,7 @@
                     <a href="building.pdf" target="_blank">Building</a>
                     <a href="testing.pdf" target="_blank">Testing</a>
                 </div>
-
+                
         </div>
     </section>
 
@@ -420,15 +419,23 @@
     </footer>
 
     <script>
-        // NEW: Disable browser's native scroll restoration to prevent jumping on reload
+        // NEW: 1. Wipe out any #tags from the URL instantly so the browser forgets where it was
+        if (window.location.hash) {
+            window.history.replaceState(null, null, window.location.pathname);
+        }
+
+        // NEW: 2. Tell the browser explicitly NOT to restore the scroll position
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
         }
 
-        // NEW: Force the page to start at the absolute top on reload
+        // NEW: 3. Force scroll to the absolute top of the page immediately 
         window.scrollTo(0, 0);
 
         document.addEventListener("DOMContentLoaded", () => {
+            // NEW: 4. Force scroll to top one more time just in case the browser lagged
+            window.scrollTo(0, 0);
+
             const reveals = document.querySelectorAll(".reveal");
             const observerOptions = { root: null, rootMargin: "0px", threshold: 0.15 };
             
@@ -445,7 +452,7 @@
             reveals.forEach(reveal => observer.observe(reveal));
 
             const pages = document.querySelectorAll('section, footer');
-            let currentIndex = 0;
+            let currentIndex = 0; // Ensures the script always starts tracking from section 0 (Home)
             let isAnimating = false;
 
             window.addEventListener('scroll', () => {
