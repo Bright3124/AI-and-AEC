@@ -20,7 +20,12 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        /* NEW: Scroll Snapping setup on the HTML element */
+        html {
             scroll-behavior: smooth;
+            scroll-snap-type: y mandatory; /* Forces the page to lock to sections vertically */
         }
 
         body {
@@ -118,30 +123,27 @@
             width: 100%;
         }
 
-        /* NEW 3D REVEAL ANIMATIONS ("Going Through Pages") */
+        /* UPDATED: 3D REVEAL ANIMATIONS (Slower and Smoother) */
         .reveal {
             opacity: 0;
-            /* Pushes the element back in 3D space, shrinks it, and moves it down slightly */
-            transform: perspective(1000px) translateZ(-100px) scale(0.85) translateY(30px);
-            /* A longer, smoother bezier curve for a cinematic "zoom in" feel */
-            transition: all 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transform: perspective(1200px) translateZ(-150px) scale(0.8) translateY(40px);
+            /* Increased to 1.8s for a longer, more elegant cinematic float */
+            transition: all 1.8s cubic-bezier(0.22, 1, 0.36, 1);
             transform-style: preserve-3d;
         }
 
         .reveal.active {
             opacity: 1;
-            /* Pulls the element forward to its natural resting place */
-            transform: perspective(1000px) translateZ(0) scale(1) translateY(0);
+            transform: perspective(1200px) translateZ(0) scale(1) translateY(0);
         }
 
-        /* Add a slight delay to grid items so they pop out sequentially */
         .project-grid .reveal:nth-child(1) { transition-delay: 0.1s; }
-        .project-grid .reveal:nth-child(2) { transition-delay: 0.2s; }
+        .project-grid .reveal:nth-child(2) { transition-delay: 0.25s; }
         
         .article-list .reveal:nth-child(1) { transition-delay: 0.1s; }
-        .article-list .reveal:nth-child(2) { transition-delay: 0.2s; }
-        .article-list .reveal:nth-child(3) { transition-delay: 0.3s; }
-        .article-list .reveal:nth-child(4) { transition-delay: 0.4s; }
+        .article-list .reveal:nth-child(2) { transition-delay: 0.25s; }
+        .article-list .reveal:nth-child(3) { transition-delay: 0.4s; }
+        .article-list .reveal:nth-child(4) { transition-delay: 0.55s; }
 
         /* Sections General */
         section {
@@ -150,8 +152,10 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            /* Requires perspective on the parent to make 3D transforms work */
             perspective: 1200px; 
+            /* NEW: Tells the browser to snap to the top of the section */
+            scroll-snap-align: start; 
+            scroll-snap-stop: always; /* Prevents scrolling past multiple sections at once */
         }
 
         /* Hero Section */
@@ -310,6 +314,7 @@
             text-align: center;
             padding: 3rem 2rem;
             border-top: 1px solid rgba(255,255,255,0.05);
+            scroll-snap-align: end; /* Ensures the footer snaps nicely at the very bottom */
         }
     </style>
 </head>
@@ -352,7 +357,7 @@
                     <a href="building.pdf" target="_blank">Building</a>
                     <a href="testing.pdf" target="_blank">Testing</a>
                 </div>
-
+    
         </div>
     </section>
 
@@ -414,14 +419,17 @@
             const observerOptions = {
                 root: null,
                 rootMargin: "0px",
-                // Triggers slightly earlier so the animation is fully visible as you scroll
-                threshold: 0.1 
+                threshold: 0.15
             };
 
-            const observer = new IntersectionObserver((entries, observer) => {
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add("active");
+                    } else {
+                        // NEW: This 'else' statement removes the class when you scroll away,
+                        // allowing the animation to trigger again when you scroll back up!
+                        entry.target.classList.remove("active");
                     }
                 });
             }, observerOptions);
