@@ -22,18 +22,17 @@
             box-sizing: border-box;
         }
 
-        /* NEW: Scroll Snapping setup on the HTML element */
-        html {
-            scroll-behavior: smooth;
-            scroll-snap-type: y mandatory; /* Forces the page to lock to sections vertically */
-        }
-
         body {
             font-family: var(--font-main);
             background-color: var(--charcoal-brown);
             color: var(--beige);
             line-height: 1.6;
             overflow-x: hidden;
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+        body::-webkit-scrollbar { 
+            display: none; 
         }
 
         /* Typography */
@@ -123,11 +122,10 @@
             width: 100%;
         }
 
-        /* UPDATED: 3D REVEAL ANIMATIONS (Slower and Smoother) */
+        /* 3D REVEAL ANIMATIONS */
         .reveal {
             opacity: 0;
             transform: perspective(1200px) translateZ(-150px) scale(0.8) translateY(40px);
-            /* Increased to 1.8s for a longer, more elegant cinematic float */
             transition: all 1.8s cubic-bezier(0.22, 1, 0.36, 1);
             transform-style: preserve-3d;
         }
@@ -153,9 +151,6 @@
             flex-direction: column;
             justify-content: center;
             perspective: 1200px; 
-            /* NEW: Tells the browser to snap to the top of the section */
-            scroll-snap-align: start; 
-            scroll-snap-stop: always; /* Prevents scrolling past multiple sections at once */
         }
 
         /* Hero Section */
@@ -314,7 +309,6 @@
             text-align: center;
             padding: 3rem 2rem;
             border-top: 1px solid rgba(255,255,255,0.05);
-            scroll-snap-align: end; /* Ensures the footer snaps nicely at the very bottom */
         }
     </style>
 </head>
@@ -357,7 +351,7 @@
                     <a href="building.pdf" target="_blank">Building</a>
                     <a href="testing.pdf" target="_blank">Testing</a>
                 </div>
-    
+
         </div>
     </section>
 
@@ -408,35 +402,130 @@
         </div>
     </section>
 
-    <footer>
+    <footer id="footer">
         <p>&copy; 2026 AI in AEC Portfolio. Built for academic and professional showcase.</p>
     </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // 1. The Intersection Observer (handles the 3D pop-in effect)
             const reveals = document.querySelectorAll(".reveal");
-
-            const observerOptions = {
-                root: null,
-                rootMargin: "0px",
-                threshold: 0.15
-            };
-
+            const observerOptions = { root: null, rootMargin: "0px", threshold: 0.15 };
+            
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add("active");
                     } else {
-                        // NEW: This 'else' statement removes the class when you scroll away,
-                        // allowing the animation to trigger again when you scroll back up!
-                        entry.target.classList.remove("active");
+                        // Removing the class allows the animation to replay
+                        entry.target.classList.remove("active"); 
                     }
                 });
             }, observerOptions);
 
-            reveals.forEach(reveal => {
-                observer.observe(reveal);
+            reveals.forEach(reveal => observer.observe(reveal));
+
+            // 2. The Smart Scroll Engine (Allows internal scrolling, triggers animation at boundaries)
+            const pages = document.querySelectorAll('section, footer');
+            let currentIndex = 0;
+            let isAnimating = false;
+
+            // Constantly track which section the user is currently reading
+            window.addEventListener('scroll', () => {
+                if (isAnimating) return;
+                // Calculate the middle of the screen to accurately determine the active section
+                const scrollMiddle = window.pageYOffset + (window.innerHeight / 2);
+                
+                pages.forEach((page, index) => {
+                    if (scrollMiddle >= page.offsetTop && scrollMiddle < page.offsetTop + page.offsetHeight) {
+                        currentIndex = index;
+                    }
+                });
+            }, { passive: true });
+
+            // Intercept mouse wheel at the boundaries
+            window.addEventListener('wheel', (e) => {
+                if (isAnimating) {
+                    e.preventDefault();
+                    return;
+                }
+
+                const currentSection = pages[currentIndex];
+                const sectionTop = currentSection.offsetTop;
+                const sectionBottom = sectionTop + currentSection.offsetHeight;
+                const scrollY = window.pageYOffset;
+                const windowH = window.innerHeight;
+
+                // Define the Trigger Points (with a 5px tolerance for smooth calculations)
+                const isAtBottom = (scrollY + windowH) >= (sectionBottom - 5);
+                const isAtTop = scrollY <= (sectionTop + 5);
+
+                if (e.deltaY > 0) { // User is scrolling DOWN
+                    if (isAtBottom && currentIndex < pages.length - 1) {
+                        // Hit the bottom trigger point! Stop native scroll and transition.
+                        e.preventDefault(); 
+                        currentIndex++;
+                        customScrollTo(currentIndex);
+                    }
+                    // If isAtBottom is FALSE, the script ignores it and lets you scroll normally!
+                } 
+                else if (e.deltaY < 0) { // User is scrolling UP
+                    if (isAtTop && currentIndex > 0) {
+                        // Hit the top trigger point! Stop native scroll and transition.
+                        e.preventDefault(); 
+                        currentIndex--;
+                        customScrollTo(currentIndex);
+                    }
+                    // If isAtTop is FALSE, the script ignores it and lets you scroll normally!
+                }
+            }, { passive: false });
+
+            // Navigation link clicks
+            document.querySelectorAll('.nav-links a, .logo').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetIndex = Array.from(pages).findIndex(page => page.id === targetId || (targetId === 'home' && page.tagName === 'SECTION'));
+                    if(targetIndex !== -1) {
+                        currentIndex = targetIndex;
+                        customScrollTo(currentIndex);
+                    }
+                });
             });
+
+            // The animation speed and math
+            function customScrollTo(index) {
+                isAnimating = true;
+                const targetPosition = pages[index].offsetTop;
+                const startPosition = window.pageYOffset;
+                const distance = targetPosition - startPosition;
+                
+                // SPEED CONTROL: 1500 = 1.5 seconds. Increase to slow down.
+                const duration = 1500; 
+                let start = null;
+
+                window.requestAnimationFrame(step);
+
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    const progress = timestamp - start;
+                    
+                    // Ease-in-out curve for cinematic glide
+                    const easeInOut = progress < duration / 2
+                        ? 4 * Math.pow(progress / duration, 3)
+                        : 1 - Math.pow(-2 * progress / duration + 2, 3) / 2;
+
+                    window.scrollTo(0, startPosition + distance * easeInOut);
+
+                    if (progress < duration) {
+                        window.requestAnimationFrame(step);
+                    } else {
+                        window.scrollTo(0, targetPosition);
+                        // Brief timeout before allowing the next scroll to prevent trackpad bouncing
+                        setTimeout(() => { isAnimating = false; }, 50); 
+                    }
+                }
+            }
         });
     </script>
 </body>
