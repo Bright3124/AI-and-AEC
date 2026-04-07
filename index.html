@@ -25,9 +25,10 @@
 
         body {
             font-family: var(--font-main);
-            background-color: var(--beige);
-            color: var(--charcoal-brown);
+            background-color: var(--charcoal-brown);
+            color: var(--beige);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         /* Typography */
@@ -36,23 +37,27 @@
             line-height: 1.1;
             letter-spacing: -0.03em;
             margin-bottom: 1rem;
+            color: var(--beige);
         }
 
         h2 {
-            font-size: clamp(2rem, 5vw, 4rem);
+            font-size: clamp(2.5rem, 5vw, 4rem);
             letter-spacing: -0.02em;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            color: var(--vanilla-custard);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
+            color: var(--beige);
         }
 
         p {
             font-size: 1.125rem;
             margin-bottom: 1.5rem;
-            color: var(--charcoal-brown);
+            color: var(--silver);
         }
 
         /* Navigation */
@@ -64,46 +69,93 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(227, 231, 211, 0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(37, 41, 28, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .logo {
             font-weight: bold;
             font-size: 1.25rem;
             text-decoration: none;
-            color: var(--charcoal-brown);
+            color: var(--vanilla-custard);
+            letter-spacing: 1px;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: var(--charcoal-brown);
+            color: var(--beige);
             font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding-bottom: 4px;
             transition: color 0.3s ease;
         }
 
-        .nav-links a:hover {
-            color: var(--grey-olive);
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--vanilla-custard);
+            transition: width 0.3s ease;
         }
 
-        /* Sections */
+        .nav-links a:hover {
+            color: var(--vanilla-custard);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* NEW 3D REVEAL ANIMATIONS ("Going Through Pages") */
+        .reveal {
+            opacity: 0;
+            /* Pushes the element back in 3D space, shrinks it, and moves it down slightly */
+            transform: perspective(1000px) translateZ(-100px) scale(0.85) translateY(30px);
+            /* A longer, smoother bezier curve for a cinematic "zoom in" feel */
+            transition: all 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transform-style: preserve-3d;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            /* Pulls the element forward to its natural resting place */
+            transform: perspective(1000px) translateZ(0) scale(1) translateY(0);
+        }
+
+        /* Add a slight delay to grid items so they pop out sequentially */
+        .project-grid .reveal:nth-child(1) { transition-delay: 0.1s; }
+        .project-grid .reveal:nth-child(2) { transition-delay: 0.2s; }
+        
+        .article-list .reveal:nth-child(1) { transition-delay: 0.1s; }
+        .article-list .reveal:nth-child(2) { transition-delay: 0.2s; }
+        .article-list .reveal:nth-child(3) { transition-delay: 0.3s; }
+        .article-list .reveal:nth-child(4) { transition-delay: 0.4s; }
+
+        /* Sections General */
         section {
-            padding: 8rem 5% 5rem;
+            padding: 10rem 5% 6rem;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            /* Requires perspective on the parent to make 3D transforms work */
+            perspective: 1200px; 
         }
 
         /* Hero Section */
         #home {
-            background-color: var(--charcoal-brown);
             background-image: linear-gradient(
                 rgba(37, 41, 28, 0.85),
                 rgba(37, 41, 28, 0.85)
@@ -111,7 +163,6 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: var(--beige);
         }
         
         #home p {
@@ -122,118 +173,143 @@
 
         /* About Section */
         #about {
-            background-color: var(--vanilla-custard);
+            background-image: linear-gradient(
+                rgba(37, 41, 28, 0.75),
+                rgba(37, 41, 28, 0.90)
+            ), url('https://images.unsplash.com/photo-1541888081622-421712a806c9?auto=format&fit=crop&w=1920&q=80&sat=-100');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        @media (max-width: 768px) {
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
+        .about-glass-panel {
+            background: rgba(227, 231, 211, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 4rem;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
 
         /* Projects Section */
         #projects {
-            background-color: var(--beige);
+            background-image: linear-gradient(
+                rgba(37, 41, 28, 0.85),
+                rgba(37, 41, 28, 0.85)
+            ), url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80&sat=-100');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
         }
 
         .project-card {
-            background: var(--silver);
+            background: rgba(227, 231, 211, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2.5rem;
-            border-radius: 12px;
-            transition: transform 0.3s ease;
+            border-radius: 16px;
+            transition: transform 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .project-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(227, 231, 211, 0.12);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         .project-card h3 {
-            color: var(--charcoal-brown);
+            color: var(--vanilla-custard);
         }
         
         .code-snippet {
             display: block;
-            background: var(--charcoal-brown);
+            background: rgba(0, 0, 0, 0.4);
             color: var(--vanilla-custard);
             padding: 1rem;
             border-radius: 8px;
             font-family: monospace;
             font-size: 0.9rem;
-            margin: 1rem 0;
+            margin: 1.5rem 0;
             overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         /* Articles Section */
         #articles {
             background-color: var(--charcoal-brown);
-            color: var(--beige);
-        }
-
-        #articles h2, #articles h3 {
-            color: var(--vanilla-custard);
-        }
-        
-        #articles p {
-            color: var(--silver);
         }
 
         .article-list {
             display: flex;
             flex-direction: column;
             gap: 2rem;
-            max-width: 800px;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .article-item {
-            border-bottom: 1px solid var(--grey-olive);
-            padding-bottom: 2rem;
+            background: rgba(227, 231, 211, 0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 12px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        
+        .article-item:hover {
+            background: rgba(227, 231, 211, 0.06);
+            transform: scale(1.01);
         }
 
-        /* Links styling for articles & projects */
+        .article-item h3 {
+            color: var(--vanilla-custard);
+        }
+
+        /* Links styling */
         .article-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
             flex-wrap: wrap;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
 
         .article-links a {
             background-color: var(--charcoal-brown);
             color: var(--beige);
             text-decoration: none;
-            font-size: 0.95rem;
-            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
             border: 1px solid var(--grey-olive);
-            border-radius: 6px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
         }
 
         .article-links a:hover {
             background-color: var(--vanilla-custard);
             color: var(--charcoal-brown);
             border-color: var(--vanilla-custard);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(230, 228, 159, 0.2);
         }
 
         /* Footer */
         footer {
-            background: var(--charcoal-brown);
+            background: #1a1c13;
             color: var(--grey-olive);
             text-align: center;
-            padding: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
     </style>
 </head>
@@ -242,32 +318,32 @@
     <nav>
         <a href="#home" class="logo">AI in AEC</a>
         <div class="nav-links">
-            <a href="#about">About Me</a>
+            <a href="#about">About</a>
             <a href="#projects">Projects</a>
-            <a href="#articles">Weekly Articles</a>
+            <a href="#articles">Analysis</a>
         </div>
     </nav>
 
     <section id="home">
-        <h1>Built to Design.<br>Powered by AI.</h1>
-        <p>A portfolio exploring the intersection of automation and artificial intelligence in the AEC industry.</p>
+        <div class="reveal">
+            <h1>Built to Design.<br>Powered by AI.</h1>
+            <p>A portfolio exploring the intersection of automation and artificial intelligence in the AEC industry.</p>
+        </div>
     </section>
 
     <section id="about">
-        <div class="about-grid">
-            <div>
-                <h2>About Me</h2>
-                <p>I am a structural engineering designer focused on bridging the gap between traditional architectural and engineering practices and the next generation of AI tools. My work revolves around project design, coordination meetings, and finding ways to work smarter, not harder.</p>
-                <p>From sizing wood posts and designing reinforced concrete shear walls to managing complex code requirements (ASCE, ACI, AISC), I leverage AI and automation tools like Microsoft Power Automate to streamline workflows, allowing for more focus on critical design analysis.</p>
-            </div>
+        <div class="about-glass-panel reveal">
+            <h2>About Me</h2>
+            <p>I am a structural engineering designer focused on bridging the gap between traditional architectural and engineering practices and the next generation of AI tools. My work revolves around project design, coordination meetings, and finding ways to work smarter, not harder.</p>
+            <p>From sizing wood posts and designing reinforced concrete shear walls to managing complex code requirements (ASCE, ACI, AISC), I leverage AI and automation tools like Microsoft Power Automate to streamline workflows, allowing for more focus on critical design analysis.</p>
         </div>
     </section>
 
     <section id="projects">
-        <h2>AEC Use Cases & Projects</h2>
+        <h2 class="reveal">AEC Use Cases & Projects</h2>
         <div class="project-grid">
             
-            <div class="project-card">
+            <div class="project-card reveal">
                 <h3>Structural Engineering Assistant</h3>
                 <p>A custom AI agent configured specifically for structural designers. It acts as a rapid knowledge base for code compliance, specifically trained to reference ASCE 7 and ACI 318.</p>
                 <p><strong>Key Feature:</strong> The agent is programmed with a priority directive to first check internal resources before utilizing broader data. Test validation included specific prompts such as querying for minimum slab reinforcement limits.</p>
@@ -281,10 +357,10 @@
     </section>
 
     <section id="articles">
-        <h2>Analysis of Weekly AI News</h2>
+        <h2 class="reveal" style="text-align: center;">Analysis of Weekly AI News</h2>
         <div class="article-list">
             
-            <div class="article-item">
+            <div class="article-item reveal">
                 <h3>Week 1: The Future of AI & Industry Disruption</h3>
                 <p><strong>Summary:</strong> An exploration of AI's evolution from an experimental phase to the "Generative Era," acting as a catalyst for compressed innovation. While promising unprecedented efficiency, it introduces risks like labor disruption and the climate paradox. In the AEC industry, these general trends manifest directly through robotics in prefabrication, supply chain optimization, and the rapid expansion of generative design.</p>
                 <div class="article-links">
@@ -294,7 +370,7 @@
                 </div>
             </div>
 
-            <div class="article-item">
+            <div class="article-item reveal">
                 <h3>Week 2: AGI and the Davos 2026 Consensus</h3>
                 <p><strong>Summary:</strong> A review of the World Economic Forum (Davos 2026) fireside chat on Artificial General Intelligence (AGI). Industry leaders note AGI is shifting from theoretical discussion to immediate urgency via recursive self-improvement. Because engineering is a math-based "verifiable domain," the AEC sector is highly susceptible to this agentic shift, forcing humans to transition from performing calculations to acting as "risk validators."</p>
                 <div class="article-links">
@@ -304,7 +380,7 @@
                 </div>
             </div>
             
-            <div class="article-item">
+            <div class="article-item reveal">
                 <h3>Week 3: The Ethics of Artificial Superintelligence (ASI)</h3>
                 <p><strong>Summary:</strong> Based on research from Springer Nature, this week tackles the "Net Impact" dilemma of ASI. While ASI could solve major global issues like climate change, it poses severe existential risks. For the AEC sector specifically, ASI could generate mathematically perfect but code-violating designs, fundamentally disrupting traditional material procurement and triggering a massive professional liability crisis.</p>
                 <div class="article-links">
@@ -314,7 +390,7 @@
                 </div>
             </div>
 
-            <div class="article-item">
+            <div class="article-item reveal">
                 <h3>Week 4: The Hallucination Trap & Behavioral Calibration</h3>
                 <p><strong>Summary:</strong> An analysis of "Why Language Models Hallucinate" (Kalai et al., 2025). The research proves hallucinations are statistical inevitabilities, worsened by benchmarks that incentivize AI to guess rather than admit ignorance. For high-stakes AEC applications where precision is paramount, models require strict "behavioral calibration" and heavy penalties for confident errors, as standard Retrieval-Augmented Generation (RAG) cannot fix the core incentive to guess on unique project data.</p>
                 <div class="article-links">
@@ -331,5 +407,29 @@
         <p>&copy; 2026 AI in AEC Portfolio. Built for academic and professional showcase.</p>
     </footer>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const reveals = document.querySelectorAll(".reveal");
+
+            const observerOptions = {
+                root: null,
+                rootMargin: "0px",
+                // Triggers slightly earlier so the animation is fully visible as you scroll
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("active");
+                    }
+                });
+            }, observerOptions);
+
+            reveals.forEach(reveal => {
+                observer.observe(reveal);
+            });
+        });
+    </script>
 </body>
 </html>
