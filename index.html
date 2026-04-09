@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI in AEC | Professional Portfolio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
     <style>
         /* Provided CSS HEX / Variables */
         :root {
@@ -13,34 +18,79 @@
             --charcoal-brown: #25291cff;
             --vanilla-custard: #e6e49fff;
             --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-mono: 'Roboto Mono', monospace; /* NEW: Monospace font variable */
         }
 
-        /* Global Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Fade-in animation to hide initial load glitches */
-        @keyframes globalFadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
+        /* NEW: Ambient Background Grid (Drafting Paper Effect) */
         body {
             font-family: var(--font-main);
             background-color: var(--charcoal-brown);
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px; /* Size of the grid squares */
             color: var(--beige);
             line-height: 1.6;
             overflow-x: hidden;
             -ms-overflow-style: none;  
             scrollbar-width: none; 
-            animation: globalFadeIn 0.6s ease-in-out forwards;
         }
         
         body::-webkit-scrollbar { 
             display: none; 
+        }
+
+        /* NEW: Preloader Styles */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--charcoal-brown);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--vanilla-custard);
+            font-family: var(--font-mono);
+            transition: opacity 0.8s ease-in-out;
+        }
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader-text {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .loader-bar-container {
+            width: 250px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+        }
+        #loader-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--vanilla-custard);
+            transition: width 0.1s linear;
+        }
+
+        /* NEW: Scroll Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background-color: var(--vanilla-custard);
+            width: 0%;
+            z-index: 10001; /* Sits above everything */
+            box-shadow: 0 0 10px var(--vanilla-custard);
         }
 
         /* Typography */
@@ -72,6 +122,17 @@
             color: var(--silver);
         }
 
+        /* NEW: Monospace Accents for tags/labels */
+        .mono-tag {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--grey-olive);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
         /* Navigation */
         nav {
             position: fixed;
@@ -81,25 +142,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(37, 41, 28, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(37, 41, 28, 0.75); /* Slightly more transparent */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             z-index: 1000;
             border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.3s ease;
         }
 
         .logo {
-            font-weight: bold;
+            font-family: var(--font-mono);
+            font-weight: 700;
             font-size: 1.25rem;
             text-decoration: none;
             color: var(--vanilla-custard);
             letter-spacing: 1px;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-        }
+        .nav-links { display: flex; gap: 2.5rem; }
 
         .nav-links a {
             text-decoration: none;
@@ -122,13 +182,8 @@
             transition: width 0.3s ease;
         }
 
-        .nav-links a:hover {
-            color: var(--vanilla-custard);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
+        .nav-links a:hover { color: var(--vanilla-custard); }
+        .nav-links a:hover::after { width: 100%; }
 
         /* 3D REVEAL ANIMATIONS */
         .reveal {
@@ -137,24 +192,15 @@
             transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
             transform-style: preserve-3d;
         }
-
         .reveal.active {
             opacity: 1;
             transform: perspective(1200px) translateZ(0) scale(1) translateY(0);
         }
-
-        section h2.reveal {
-            transition-delay: .15s !important;
-        }
-
-        .project-grid .reveal:nth-child(1) { transition-delay: 0.45s; }
-        .project-grid .reveal:nth-child(2) { transition-delay: 0.55s; }
-        
-        .article-list .reveal:nth-child(1) { transition-delay: 0.45s; }
-        .article-list .reveal:nth-child(2) { transition-delay: 0.55s; }
-        .article-list .reveal:nth-child(3) { transition-delay: 0.55s; }
-        .article-list .reveal:nth-child(4) { transition-delay: 0.55s; }
-        .article-list .reveal:nth-child(5) { transition-delay: 0.55s; }
+        section h2.reveal { transition-delay: 0s !important; }
+        .project-grid .reveal:nth-child(1) { transition-delay: 0.15s; }
+        .project-grid .reveal:nth-child(2) { transition-delay: 0.25s; }
+        .article-list .reveal:nth-child(odd) { transition-delay: 0.15s; }
+        .article-list .reveal:nth-child(even) { transition-delay: 0.25s; }
 
         /* Sections General */
         section {
@@ -164,6 +210,7 @@
             flex-direction: column;
             justify-content: center;
             perspective: 1200px; 
+            position: relative;
         }
 
         /* Hero Section */
@@ -176,28 +223,16 @@
             background-position: center;
             background-attachment: fixed;
         }
-        
-        #home p {
-            color: var(--silver);
-            max-width: 600px;
-            font-size: 1.5rem;
-        }
+        #home p { color: var(--silver); max-width: 600px; font-size: 1.5rem; }
 
         /* About Section */
         #about {
-            background-image: linear-gradient(
-                rgba(37, 41, 28, 0.75),
-                rgba(37, 41, 28, 0.90)
-            ), url('https://images.unsplash.com/photo-1541888081622-421712a806c9?auto=format&fit=crop&w=1920&q=80&sat=-100');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-image: linear-gradient(rgba(37, 41, 28, 0.80), rgba(37, 41, 28, 0.95)), url('https://images.unsplash.com/photo-1541888081622-421712a806c9?auto=format&fit=crop&w=1920&q=80&sat=-100');
+            background-size: cover; background-position: center; background-attachment: fixed;
         }
-
         .about-glass-panel {
             background: rgba(227, 231, 211, 0.05);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 4rem;
@@ -208,131 +243,174 @@
 
         /* Projects Section */
         #projects {
-            background-image: linear-gradient(
-                rgba(37, 41, 28, 0.85),
-                rgba(37, 41, 28, 0.85)
-            ), url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80&sat=-100');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-image: linear-gradient(rgba(37, 41, 28, 0.85), rgba(37, 41, 28, 0.90)), url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80&sat=-100');
+            background-size: cover; background-position: center; background-attachment: fixed;
         }
-
         .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2.5rem;
         }
 
-        .project-card {
-            background: rgba(227, 231, 211, 0.08);
+        /* NEW: Mouse Spotlight Effect Classes */
+        .spotlight-card {
+            background: rgba(227, 231, 211, 0.05);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2.5rem;
             border-radius: 16px;
-            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden; /* Keeps glow inside the card */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
+        
+        /* The Glow element */
+        .spotlight-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            /* Variables updated by JS */
+            background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(230, 228, 159, 0.08), transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .spotlight-card:hover::before { opacity: 1; }
+        
+        /* Elevates text above the glow */
+        .spotlight-card > * { position: relative; z-index: 1; }
 
-        .project-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            background: rgba(227, 231, 211, 0.12);
+        .spotlight-card:hover {
+            transform: translateY(-8px) scale(1.01);
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: rgba(230, 228, 159, 0.3); /* subtle border glow */
         }
-
-        .project-card h3 {
-            color: var(--vanilla-custard);
-        }
+        .spotlight-card h3 { color: var(--vanilla-custard); }
         
         .code-snippet {
             display: block;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.6);
             color: var(--vanilla-custard);
-            padding: 1rem;
+            padding: 1.2rem;
             border-radius: 8px;
-            font-family: monospace;
-            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
             margin: 1.5rem 0;
             overflow-x: auto;
             border: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Articles Section */
+        /* Articles Section - Transparent to let the global grid show */
         #articles {
-            background-color: var(--charcoal-brown);
+            background-color: transparent; 
         }
 
+        /* NEW: Two-Column Article Grid */
         .article-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            max-width: 900px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
             margin: 0 auto;
-        }
-
-        .article-item {
-            background: rgba(227, 231, 211, 0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 2.5rem;
-            border-radius: 12px;
-            transition: transform 0.3s ease, background 0.3s ease;
-        }
-        
-        .article-item:hover {
-            background: rgba(227, 231, 211, 0.06);
-            transform: scale(1.01);
-        }
-
-        .article-item h3 {
-            color: var(--vanilla-custard);
         }
 
         /* Links styling */
         .article-links {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
             margin-top: 1.5rem;
         }
-
         .article-links a {
-            background-color: var(--charcoal-brown);
+            background-color: rgba(0,0,0,0.3);
             color: var(--beige);
             text-decoration: none;
-            font-size: 0.9rem;
-            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+            font-family: var(--font-mono); /* Applied monospace to buttons */
+            padding: 0.6rem 1rem;
             border: 1px solid var(--grey-olive);
-            border-radius: 30px;
+            border-radius: 6px; /* Squared off for a more technical look */
             transition: all 0.3s ease;
-            letter-spacing: 0.5px;
         }
-
         .article-links a:hover {
             background-color: var(--vanilla-custard);
             color: var(--charcoal-brown);
             border-color: var(--vanilla-custard);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(230, 228, 159, 0.2);
         }
 
-        /* Footer */
-        footer {
-            background: #1a1c13;
-            color: var(--grey-olive);
+        /* NEW: Upgraded CTA Footer */
+        #footer {
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 8rem 5% 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            padding: 3rem 2rem;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
+
+        .cta-container h2 {
+            font-family: var(--font-mono);
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .cta-container p {
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background-color: var(--vanilla-custard);
+            color: var(--charcoal-brown);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(230, 228, 159, 0.2);
+        }
+
+        .cta-btn:hover {
+            background-color: var(--beige);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(230, 228, 159, 0.4);
+        }
+
+        .footer-bottom {
+            margin-top: 6rem;
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            color: var(--grey-olive);
+            opacity: 0.6;
+        }
+
     </style>
 </head>
 <body>
 
+    <div id="scroll-progress"></div>
+
+    <div id="preloader">
+        <div class="loader-text">INITIALIZING_AEC_ENVIRONMENT... <span id="load-percent">0%</span></div>
+        <div class="loader-bar-container">
+            <div id="loader-bar"></div>
+        </div>
+    </div>
+
     <nav>
-        <a href="#home" class="logo">AI in AEC</a>
+        <a href="#home" class="logo"> AI_IN_AEC</a>
         <div class="nav-links">
             <a href="#about">About</a>
             <a href="#projects">Projects</a>
-            <a href="#articles">Analysis</a>
+            <a href="#articles">AI News</a>
         </div>
     </nav>
 
@@ -355,7 +433,8 @@
         <h2 class="reveal">AEC Use Cases & Projects</h2>
         <div class="project-grid">
             
-            <div class="project-card reveal">
+            <div class="spotlight-card reveal">
+                <span class="mono-tag">Agentic Workflow</span>
                 <h3>Structural Engineering Assistant</h3>
                 <p>A custom AI agent configured specifically for structural designers. It acts as a rapid knowledge base for code compliance, specifically trained to reference ASCE 7 and ACI 318.</p>
                 <p><strong>Key Feature:</strong> The agent is programmed with a priority directive to first check internal resources before utilizing broader data. Test validation included specific prompts such as querying for minimum slab reinforcement limits.</p>
@@ -364,7 +443,7 @@
                     <a href="building.pdf" target="_blank">Building</a>
                     <a href="testing.pdf" target="_blank">Testing</a>
                 </div>
-                
+
         </div>
     </section>
 
@@ -372,85 +451,132 @@
         <h2 class="reveal" style="text-align: center;">Analysis of Weekly AI News</h2>
         <div class="article-list">
             
-            <div class="article-item reveal">
-                <h3>Week 1: The Future of AI & Industry Disruption</h3>
+            <div class="spotlight-card reveal">
+                <span class="mono-tag">Week 1 // Overview</span>
+                <h3>The Future of AI & Industry Disruption</h3>
                 <p><strong>Summary:</strong> An exploration of AI's evolution from an experimental phase to the "Generative Era," acting as a catalyst for compressed innovation. While promising unprecedented efficiency, it introduces risks like labor disruption and the climate paradox. In the AEC industry, these general trends manifest directly through robotics in prefabrication, supply chain optimization, and the rapid expansion of generative design.</p>
                 <div class="article-links">
                     <a href="https://builtin.com/artificial-intelligence/artificial-intelligence-future" target="_blank">Original Source</a>
-                    <a href="week1.pdf" target="_blank">View Summary (PDF)</a>
-                    <a href="week1 interactive.pdf" target="_blank">View Interactive (Gamma AI)</a>
+                    <a href="week1.pdf" target="_blank">Summary (PDF)</a>
+                    <a href="week1 interactive.pdf" target="_blank">Interactive</a>
                 </div>
             </div>
 
-            <div class="article-item reveal">
-                <h3>Week 2: AGI and the Davos 2026 Consensus</h3>
-                <p><strong>Summary:</strong> A review of the World Economic Forum (Davos 2026) fireside chat on Artificial General Intelligence (AGI). Industry leaders note AGI is shifting from theoretical discussion to immediate urgency via recursive self-improvement. Because engineering is a math-based "verifiable domain," the AEC sector is highly susceptible to this agentic shift, forcing humans to transition from performing calculations to acting as "risk validators."</p>
+            <div class="spotlight-card reveal">
+                <span class="mono-tag">Week 2 // Policy</span>
+                <h3>AGI and the Davos 2026 Consensus</h3>
+                <p><strong>Summary:</strong> A review of the World Economic Forum fireside chat on AGI. Industry leaders note AGI is shifting from theoretical to immediate urgency via recursive self-improvement. Because engineering is a math-based "verifiable domain," the AEC sector is highly susceptible to this agentic shift, forcing humans to transition from performing calculations to acting as "risk validators."</p>
                 <div class="article-links">
                     <a href="https://www.youtube.com/watch?v=hGyJEFt0Saw" target="_blank">Original Source</a>
-                    <a href="week2.pdf" target="_blank">View Summary (PDF)</a>
-                    <a href="week2 interactive.mp4" target="_blank">View Interactive (InVideo AI)</a>
+                    <a href="week2.pdf" target="_blank">Summary (PDF)</a>
+                    <a href="week2 interactive.mp4" target="_blank">Interactive</a>
                 </div>
             </div>
             
-            <div class="article-item reveal">
-                <h3>Week 3: The Ethics of Artificial Superintelligence (ASI)</h3>
-                <p><strong>Summary:</strong> Based on research from Springer Nature, this week tackles the "Net Impact" dilemma of ASI. While ASI could solve major global issues like climate change, it poses severe existential risks. For the AEC sector specifically, ASI could generate mathematically perfect but code-violating designs, fundamentally disrupting traditional material procurement and triggering a massive professional liability crisis.</p>
+            <div class="spotlight-card reveal">
+                <span class="mono-tag">Week 3 // Ethics</span>
+                <h3>The Ethics of Artificial Superintelligence</h3>
+                <p><strong>Summary:</strong> Based on research from Springer Nature, this week tackles the "Net Impact" dilemma of ASI. For the AEC sector specifically, ASI could generate mathematically perfect but code-violating designs, fundamentally disrupting traditional material procurement and triggering a massive professional liability crisis.</p>
                 <div class="article-links">
                     <a href="https://link.springer.com/article/10.1007/s43681-025-00793-7" target="_blank">Original Source</a>
-                    <a href="week3.pdf" target="_blank">View Summary (PDF)</a>
-                    <a href="week3 interactive.pdf" target="_blank">View Interactive (Gamma AI)</a>
+                    <a href="week3.pdf" target="_blank">Summary (PDF)</a>
+                    <a href="week3 interactive.pdf" target="_blank">Interactive</a>
                 </div>
             </div>
 
-            <div class="article-item reveal">
-                <h3>Week 4: The Hallucination Trap & Behavioral Calibration</h3>
-                <p><strong>Summary:</strong> An analysis of "Why Language Models Hallucinate" (Kalai et al., 2025). The research proves hallucinations are statistical inevitabilities, worsened by benchmarks that incentivize AI to guess rather than admit ignorance. For high-stakes AEC applications where precision is paramount, models require strict "behavioral calibration" and heavy penalties for confident errors, as standard Retrieval-Augmented Generation (RAG) cannot fix the core incentive to guess on unique project data.</p>
+            <div class="spotlight-card reveal">
+                <span class="mono-tag">Week 4 // Technical Limitations</span>
+                <h3>The Hallucination Trap & Calibration</h3>
+                <p><strong>Summary:</strong> An analysis of "Why Language Models Hallucinate." The research proves hallucinations are statistical inevitabilities. For high-stakes AEC applications where precision is paramount, models require strict "behavioral calibration" and heavy penalties for confident errors, as standard RAG cannot fix the core incentive to guess on unique project data.</p>
                 <div class="article-links">
                     <a href="https://www.researchgate.net/publication/395339045_Why_Language_Models_Hallucinate" target="_blank">Original Source</a>
-                    <a href="week4.pdf" target="_blank">View Summary (PDF)</a>
-                    <a href="week4 interactive.png" target="_blank">View Interactive (NotebookLM)</a>
+                    <a href="week4.pdf" target="_blank">Summary (PDF)</a>
+                    <a href="week4 interactive.png" target="_blank">Interactive</a>
                 </div>
             </div>
             
-            <div class="article-item reveal">
-                <h3>Week 5: The Agentic Shift, BIM Operating Systems, and the Gigawatt Ceiling</h3>
-                <p><strong>Summary:</strong> The AI industry is moving past standalone software into an "Agent-as-a-Service" model, where autonomous multi-agent systems execute complex workflows. In the AEC sector, this manifests as "Agentic BIM," transitioning file-based applications into a cloud-based "operating system" where AI continuously generates and tests structural and MEP elements for code compliance. As agents handle the heavy lifting, the human role will pivot from software operator to an "orchestrator" defining boundaries and design intent. Concurrently, the massive computational power required for these systems is hitting a "Gigawatt Ceiling," sparking a datacenter construction boom that will heavily rely on specialized structural engineering to support advanced cooling and energy loads. Ultimately, this extreme efficiency will force AEC firms to shift their business models from billable hours to fixed-fee, value-based pricing.</p>
+            <div class="spotlight-card reveal">
+                <span class="mono-tag">Week 5 // Future Workflow</span>
+                <h3>Agentic BIM & the Gigawatt Ceiling</h3>
+                <p><strong>Summary:</strong> The AI industry is moving into an "Agent-as-a-Service" model. In the AEC sector, this manifests as "Agentic BIM," transitioning file-based apps into a cloud-based "operating system." Concurrently, the massive power required is hitting a "Gigawatt Ceiling," sparking a datacenter construction boom that will rely on specialized structural engineering.</p>
                 <div class="article-links">
-                    <a href="https://www.goldmansachs.com/insights/articles/what-to-expect-from-ai-in-2026-personal-agents-mega-alliances" target="_blank">Original General Source</a>
-                    <a href="week5.pdf" target="_blank">View General Summary (PDF)</a>
-                    <a href="week5 interactive.png" target="_blank">View General Interactive (Gamma)</a>
-                    <a href="https://aecmag.com/bim/the-agentic-future-of-bim/" target="_blank">Original AEC Source</a>
-                    <a href="week5a.pdf" target="_blank">View AEC Summary (PDF)</a>
-                    <a href="week5a interactive.pdf" target="_blank">View AEC Interactive (NotebookLM)</a>
+                    <a href="https://www.goldmansachs.com/insights/articles/what-to-expect-from-ai-in-2026-personal-agents-mega-alliances" target="_blank">GS Source</a>
+                    <a href="https://aecmag.com/bim/the-agentic-future-of-bim/" target="_blank">AEC Source</a>
+                    <a href="week5a.pdf" target="_blank">AEC Summary</a>
+                    <a href="week5a interactive.pdf" target="_blank">Interactive</a>
                 </div>
             </div>
-
 
         </div>
     </section>
 
     <footer id="footer">
-        <p>&copy; 2026 AI in AEC Portfolio. Built for academic and professional showcase.</p>
+        <div class="cta-container reveal">
+            <h2> Ready_to_Build?</h2>
+            <p>Bridge the gap between traditional structural engineering and the next generation of artificial intelligence.</p>
+            <a href="mailto:your.email@example.com" class="cta-btn">Initialize Contact</a>
+        </div>
+        <div class="footer-bottom">
+            <p>SYS.LOG // &copy; 2026 AI in AEC Portfolio. Built for academic and professional showcase.</p>
+        </div>
     </footer>
 
     <script>
-        // NEW: 1. Wipe out any #tags from the URL instantly so the browser forgets where it was
+        // --- 1. PRELOADER LOGIC ---
+        // Simulates a loading sequence, then fades out
+        let progress = 0;
+        const loaderText = document.getElementById('load-percent');
+        const loaderBar = document.getElementById('loader-bar');
+        const preloader = document.getElementById('preloader');
+        
+        const loadInterval = setInterval(() => {
+            progress += Math.floor(Math.random() * 15) + 5; // Random jumps for realistic feel
+            if(progress >= 100) progress = 100;
+            
+            loaderText.innerText = progress + "%";
+            loaderBar.style.width = progress + "%";
+
+            if (progress >= 100) {
+                clearInterval(loadInterval);
+                setTimeout(() => {
+                    preloader.classList.add('fade-out');
+                    // Start the page at the top once loaded
+                    window.scrollTo(0, 0);
+                }, 400); // Brief pause at 100% before fading
+            }
+        }, 80);
+
+        // --- 2. SCROLL PROGRESS BAR ---
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scroll-progress").style.width = scrolled + "%";
+        });
+
+        // --- 3. MOUSE SPOTLIGHT EFFECT ---
+        // Tracks cursor position over cards and applies it to CSS variables
+        document.querySelectorAll('.spotlight-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Wipe URL hashes to prevent jumping
         if (window.location.hash) {
             window.history.replaceState(null, null, window.location.pathname);
         }
-
-        // NEW: 2. Tell the browser explicitly NOT to restore the scroll position
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
         }
 
-        // NEW: 3. Force scroll to the absolute top of the page immediately 
-        window.scrollTo(0, 0);
-
+        // --- 4. SMART SCROLL ENGINE & REVEALS ---
         document.addEventListener("DOMContentLoaded", () => {
-            // NEW: 4. Force scroll to top one more time just in case the browser lagged
-            window.scrollTo(0, 0);
-
+            
             const reveals = document.querySelectorAll(".reveal");
             const observerOptions = { root: null, rootMargin: "0px", threshold: 0.15 };
             
@@ -467,7 +593,7 @@
             reveals.forEach(reveal => observer.observe(reveal));
 
             const pages = document.querySelectorAll('section, footer');
-            let currentIndex = 0; // Ensures the script always starts tracking from section 0 (Home)
+            let currentIndex = 0; 
             let isAnimating = false;
 
             window.addEventListener('scroll', () => {
@@ -482,6 +608,9 @@
             }, { passive: true });
 
             window.addEventListener('wheel', (e) => {
+                // Do not intercept scroll if inside a preloader
+                if (progress < 100) return;
+
                 if (isAnimating) {
                     e.preventDefault();
                     return;
@@ -536,15 +665,15 @@
 
                 function step(timestamp) {
                     if (!start) start = timestamp;
-                    const progress = timestamp - start;
+                    const progressTime = timestamp - start;
                     
-                    const easeInOut = progress < duration / 2
-                        ? 4 * Math.pow(progress / duration, 3)
-                        : 1 - Math.pow(-2 * progress / duration + 2, 3) / 2;
+                    const easeInOut = progressTime < duration / 2
+                        ? 4 * Math.pow(progressTime / duration, 3)
+                        : 1 - Math.pow(-2 * progressTime / duration + 2, 3) / 2;
 
                     window.scrollTo(0, startPosition + distance * easeInOut);
 
-                    if (progress < duration) {
+                    if (progressTime < duration) {
                         window.requestAnimationFrame(step);
                     } else {
                         window.scrollTo(0, targetPosition);
