@@ -199,6 +199,10 @@
         section h2.reveal { transition-delay: 0s !important; }
         .project-grid .reveal:nth-child(1) { transition-delay: 0.15s; }
         .project-grid .reveal:nth-child(2) { transition-delay: 0.25s; }
+        .project-grid .reveal:nth-child(3) { transition-delay: 0.35s; }
+        .project-grid .reveal:nth-child(4) { transition-delay: 0.45s; }
+        .project-grid .reveal:nth-child(5) { transition-delay: 0.55s; }
+
         .article-list .reveal:nth-child(odd) { transition-delay: 0.15s; }
         .article-list .reveal:nth-child(even) { transition-delay: 0.25s; }
 
@@ -252,10 +256,11 @@
             gap: 2.5rem;
         }
 
-        /* NEW: Mouse Spotlight Effect Classes */
+        /* Mouse Spotlight Effect Classes */
         .spotlight-card {
-            background: rgba(227, 231, 211, 0.05);
+            background: rgba(227, 231, 211, 0.08);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2.5rem;
             border-radius: 16px;
@@ -270,7 +275,6 @@
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            /* Variables updated by JS */
             background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(230, 228, 159, 0.08), transparent 40%);
             z-index: 0;
             pointer-events: none;
@@ -283,7 +287,7 @@
         .spotlight-card > * { position: relative; z-index: 1; }
 
         .spotlight-card:hover {
-            transform: translateY(-8px) scale(1.01);
+            transform: translateY(-8px) scale(1.02);
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             border-color: rgba(230, 228, 159, 0.3); /* subtle border glow */
         }
@@ -291,23 +295,23 @@
         
         .code-snippet {
             display: block;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.4);
             color: var(--vanilla-custard);
-            padding: 1.2rem;
+            padding: 1rem;
             border-radius: 8px;
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
+            font-family: monospace;
+            font-size: 0.9rem;
             margin: 1.5rem 0;
             overflow-x: auto;
             border: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Articles Section - Transparent to let the global grid show */
+        /* Articles Section */
         #articles {
             background-color: transparent; 
         }
 
-        /* NEW: Two-Column Article Grid */
+        /* Two-Column Article Grid */
         .article-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -328,10 +332,10 @@
             color: var(--beige);
             text-decoration: none;
             font-size: 0.85rem;
-            font-family: var(--font-mono); /* Applied monospace to buttons */
+            font-family: var(--font-mono); 
             padding: 0.6rem 1rem;
             border: 1px solid var(--grey-olive);
-            border-radius: 6px; /* Squared off for a more technical look */
+            border-radius: 6px; 
             transition: all 0.3s ease;
         }
         .article-links a:hover {
@@ -341,7 +345,7 @@
             transform: translateY(-2px);
         }
 
-        /* NEW: Upgraded CTA Footer */
+        /* Upgraded CTA Footer */
         #footer {
             background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
             padding: 8rem 5% 4rem;
@@ -423,6 +427,7 @@
 
     <section id="about">
         <div class="about-glass-panel reveal">
+            <span class="mono-tag">// sys.profile.bio</span>
             <h2>About Me</h2>
             <p>I am a structural engineer focused on bridging the gap between traditional architectural and engineering practices and the next generation of AI tools. My work revolves around project design, coordination meetings, and finding ways to work smarter, not harder.</p>
             <p>From sizing wood posts and designing reinforced concrete shear walls to managing complex code requirements (ASCE, ACI, AISC), I leverage AI and automation tools like Microsoft Power Automate to streamline workflows, allowing for more focus on critical design analysis.</p>
@@ -443,6 +448,50 @@
                     <a href="building.pdf" target="_blank">Building</a>
                     <a href="testing.pdf" target="_blank">Testing</a>
                 </div>
+            </div>
+
+            <div class="spotlight-card reveal">
+                <span class="mono-tag">Process Automation</span>
+                <h3>Executive Time Management & Proposal Flow</h3>
+                <p>An automated workflow utilizing Microsoft Power Automate to generate daily briefings by parsing Outlook calendars and emails. This project also features an AI agent designed to assist management with drafting proposals across public safety, water/wastewater, and education markets.</p>
+                <p><strong>Technical Detail:</strong> Utilized OData filter queries and precise data formatting to manage time zones effectively:</p>
+                <code class="code-snippet">convertFromUtc(item()?['start'], 'Eastern Standard Time', 'hh:mm tt')</code>
+            </div>
+
+            <div class="spotlight-card reveal">
+                <span class="mono-tag">AI Quantity Takeoffs</span>
+                <h3>Togal.AI Evaluation</h3>
+                <p>Evaluated Togal.AI's automated estimating capabilities across 5 construction drawing sets. The tool excelled at accurately capturing door types and quantities but struggled with precise building footprint areas.</p>
+                <p><strong>Industry Impact:</strong> AI estimating tools will shift the estimator's role from a "designer/producer" to a "moderator/validator," achieving 60-80% completion in seconds. Ethical use hinges on treating AI as an assistive tool rather than a complete replacement.</p>
+                <div class="article-links">
+                    <a href="2026-02-14_FireStation-Set_v1.pdf" target="_blank">Fire Station</a>
+                    <a href="2026-02-14_Military-Office1-Set_v1.pdf" target="_blank">Military Office</a>
+                    <a href="2026-02-14_Multistory-Hotel-Set_v1.pdf" target="_blank">Multistory Hotel</a>
+                    <a href="2026-02-14_Youth-Center1-Set_v1.pdf" target="_blank">Youth Center</a>
+                    <a href="2026-02-16_Car-Dealership-Set_v1.pdf" target="_blank">Car Dealership</a>
+                </div>
+            </div>
+
+            <div class="spotlight-card reveal">
+                <span class="mono-tag">Custom GPTs</span>
+                <h3>Reviewing "Mini Agents"</h3>
+                <p>Tested specialized custom AI agents for practical utility. Explored a cooking assistant that provided a highly natural, conversational experience without over-explaining, alongside a Gemini Gem that generated HTML recipes from fridge contents.</p>
+                <p><strong>AEC Application:</strong> Tested an NYC Building Code GPT. While highly effective at locating specific code sections (like flood-resistant construction), it missed crucial nuances. It serves as a powerful navigation tool but currently still requires human interpretation.</p>
+                <div class="article-links">
+                    <a href="https://chatgpt.com/share/699a5e94-229c-800c-868e-f1a85017ec9e" target="_blank">Cooking Agent</a>
+                    <a href="https://chatgpt.com/share/699a63a4-b5f8-800c-a95a-b59c8c84aeb4" target="_blank">NYC Code Agent</a>
+                </div>
+            </div>
+
+            <div class="spotlight-card reveal">
+                <span class="mono-tag">AI Literature Review</span>
+                <h3>AI Book Summarizer</h3>
+                <p>Leveraged a custom AI Book Summarizer to explore professional literature focused on business, professional development, and artificial intelligence.</p>
+                <p><strong>Objective:</strong> Demonstrates the utility of Large Language Models in rapidly distilling complex professional reading into actionable insights and fostering continuous professional development without sacrificing depth.</p>
+                <div class="article-links">
+                    <a href="https://chatgpt.com/share/69a62d78-cdcc-800c-a112-21e575037e82" target="_blank">View Conversation</a>
+                </div>
+            </div>
 
         </div>
     </section>
@@ -501,8 +550,6 @@
                 <p><strong>Summary:</strong> The AI industry is moving into an "Agent-as-a-Service" model. In the AEC sector, this manifests as "Agentic BIM," transitioning file-based apps into a cloud-based "operating system." Concurrently, the massive power required is hitting a "Gigawatt Ceiling," sparking a datacenter construction boom that will rely on specialized structural engineering.</p>
                 <div class="article-links">
                     <a href="https://www.goldmansachs.com/insights/articles/what-to-expect-from-ai-in-2026-personal-agents-mega-alliances" target="_blank">GS Source</a>
-                    <a href="week5.pdf" target="_blank">GS Summary</a>
-                    <a href="week5 interactive.png" target="_blank">Interactive</a>      
                     <a href="https://aecmag.com/bim/the-agentic-future-of-bim/" target="_blank">AEC Source</a>
                     <a href="week5a.pdf" target="_blank">AEC Summary</a>
                     <a href="week5a interactive.pdf" target="_blank">Interactive</a>
